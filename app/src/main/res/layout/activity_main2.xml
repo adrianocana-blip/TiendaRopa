@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="32dp"
+    android:paddingTop="48dp"
+    android:paddingEnd="32dp"
+    android:paddingBottom="32dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TU PEDIDO"
+        android:textColor="#757575"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imagenPrenda"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="24dp"
+        android:adjustViewBounds="true"
+        android:background="#FFFFFF"
+        android:padding="12dp"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/textoPrenda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:textColor="#212121"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="16dp"
+        android:background="#6200EE" />
+
+    <TextView
+        android:id="@+id/textoTalla"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textColor="#616161"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/textoPrecio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="#616161"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/botonVolver"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#212121"
+        android:text="Volver"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

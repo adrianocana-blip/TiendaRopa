@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="32dp"
+    android:paddingTop="48dp"
+    android:paddingEnd="32dp"
+    android:paddingBottom="32dp">
+
+    <TextView
+        android:id="@+id/bienvenida"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="MODA URBANA"
+        android:textColor="#212121"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Elige tu prenda"
+        android:textColor="#757575"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="16dp"
+        android:background="#6200EE" />
+
+    <EditText
+        android:id="@+id/textPrenda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:background="#FFFFFF"
+        android:hint="Prenda"
+        android:inputType="text"
+        android:padding="16dp"
+        android:textColor="#212121"
+        android:textColorHint="#9E9E9E" />
+
+    <EditText
+        android:id="@+id/textTalla"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#FFFFFF"
+        android:hint="Talla"
+        android:inputType="text"
+        android:padding="16dp"
+        android:textColor="#212121"
+        android:textColorHint="#9E9E9E" />
+
+    <EditText
+        android:id="@+id/textPrecio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#FFFFFF"
+        android:hint="Precio (€)"
+        android:inputType="numberDecimal"
+        android:padding="16dp"
+        android:textColor="#212121"
+        android:textColorHint="#9E9E9E" />
+
+    <Button
+        android:id="@+id/botonGuardar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="48dp"
+        android:backgroundTint="#212121"
+        android:text="Guardar"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/botonHistorial"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#757575"
+        android:text="Ver historial"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/botonBorrar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#BDBDBD"
+        android:text="Limpiar todo"
+        android:textColor="#212121" />
+
+</LinearLayout>
