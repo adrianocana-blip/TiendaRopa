@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                         .putString("PRECIO_GUARDADO", precio)
                         .apply()
 
-                    // NUEVO: añadir al historial
+                    // añadir al historial
                     Historial.prendas.add(Prenda(prenda, talla, precio))
 
                     val intent = Intent(this, MainActivity2::class.java)
@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        // NUEVO: botón Ver Historial
+        // botón Ver Historial
         botonHistorial.setOnClickListener {
             startActivity(Intent(this, HistorialActivity::class.java))
         }
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
             editPrecio.text.clear()
             prefs.edit().clear().apply()
 
-            // NUEVO: vaciar también el historial
+            //  vaciar también el historial
             Historial.prendas.clear()
 
             Toast.makeText(this, "Datos borrados", Toast.LENGTH_SHORT).show()

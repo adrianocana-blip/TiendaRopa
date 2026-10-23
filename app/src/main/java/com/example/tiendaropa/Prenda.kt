@@ -3,7 +3,6 @@ package com.example.tiendaropa
 data class Prenda(
     val nombre: String,
     val talla: String,
-    val precio: String,
-    val foto: String
+    val precio: String
 )
 // añadir la foto en el historial
