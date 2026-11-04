@@ -6,8 +6,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private val db by lazy { AppDatabase.obtener(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -18,7 +21,6 @@ class MainActivity : ComponentActivity() {
         val botonGuardar = findViewById<Button>(R.id.botonGuardar)
         val botonHistorial = findViewById<Button>(R.id.botonHistorial)
         val botonLimpiar = findViewById<Button>(R.id.botonBorrar)
-
         val prefs = getSharedPreferences("Historial de compra", MODE_PRIVATE)
 
         editPrenda.setText(prefs.getString("PRENDA_GUARDADA", ""))
@@ -26,27 +28,21 @@ class MainActivity : ComponentActivity() {
         editPrecio.setText(prefs.getString("PRECIO_GUARDADO", ""))
 
         botonGuardar.setOnClickListener {
-            val prenda = editPrenda.text.toString().trim() // trim() para que no cuenten los espacios
+            val prenda = editPrenda.text.toString().trim()
             val talla = editTalla.text.toString().trim()
             val precio = editPrecio.text.toString().trim()
-
             when {
-                prenda.isEmpty() || talla.isEmpty() || precio.isEmpty() -> {
+                prenda.isEmpty() || talla.isEmpty() || precio.isEmpty() ->
                     Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
-                }
-                precio.toDoubleOrNull() == null -> {
+                precio.toDoubleOrNull() == null ->
                     Toast.makeText(this, "El precio no es válido", Toast.LENGTH_SHORT).show()
-                }
                 else -> {
-                    prefs.edit()
-                        .putString("PRENDA_GUARDADA", prenda)
+                    prefs.edit().putString("PRENDA_GUARDADA", prenda)
                         .putString("TALLA_GUARDADA", talla)
-                        .putString("PRECIO_GUARDADO", precio)
-                        .apply()
-
-                    // añadir al historial
-                    Historial.prendas.add(Prenda(prenda, talla, precio))
-
+                        .putString("PRECIO_GUARDADO", precio).apply()
+                    lifecycleScope.launch {
+                        db.prendaDao().insertar(Prenda(nombre = prenda, talla = talla, precio = precio))
+                    }
                     val intent = Intent(this, MainActivity2::class.java)
                     intent.putExtra("PRENDA_EXTRA", prenda)
                     intent.putExtra("TALLA_EXTRA", talla)
@@ -55,22 +51,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        // botón Ver Historial
         botonHistorial.setOnClickListener {
             startActivity(Intent(this, HistorialActivity::class.java))
         }
-
         botonLimpiar.setOnClickListener {
             editPrenda.text.clear()
             editTalla.text.clear()
             editPrecio.text.clear()
             prefs.edit().clear().apply()
-
-            //  vaciar también el historial
-            Historial.prendas.clear()
-
-            Toast.makeText(this, "Datos borrados", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Datos del formulario borrados", Toast.LENGTH_SHORT).show()
         }
     }
 }
