@@ -35,7 +35,7 @@ class PrendaAdapter(
 
     override fun getItemCount() = lista.size
 
-    fun actualizarLista nuevaLista: List<Prenda> {
+    fun actualizarLista(nuevaLista: List<Prenda>) {
         lista = nuevaLista
         notifyDataSetChanged()
     }
