@@ -1,40 +1,27 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp") version "2.2.10-2.0.2"
 }
 
 android {
     namespace = "com.example.tiendaropa"
-    compileSdk {
-        version = release(37)
-    }
-
+    compileSdk { version = release(37) }
     defaultConfig {
         applicationId = "com.example.tiendaropa"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
-    buildTypes {
-        release {
-            optimization {
-                enable = false
-            }
-        }
-    }
+    buildTypes { release { optimization { enable = false } } }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    buildFeatures {
-        compose = true
-    }
+    buildFeatures { compose = true }
 }
-
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -49,6 +36,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.material)
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.room:room-runtime:2.8.5")
+    ksp("androidx.room:room-compiler:2.8.5")
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
