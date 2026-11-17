@@ -6,11 +6,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var dao: PrendaDao
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        // 1. Obtener la instancia correcta del DAO
+        dao = AppDatabase.obtener(this).prendaDao()
 
         val editPrenda = findViewById<EditText>(R.id.textPrenda)
         val editTalla = findViewById<EditText>(R.id.textTalla)
@@ -19,58 +27,53 @@ class MainActivity : ComponentActivity() {
         val botonHistorial = findViewById<Button>(R.id.botonHistorial)
         val botonLimpiar = findViewById<Button>(R.id.botonBorrar)
 
-        val prefs = getSharedPreferences("Historial de compra", MODE_PRIVATE)
-
-        editPrenda.setText(prefs.getString("PRENDA_GUARDADA", ""))
-        editTalla.setText(prefs.getString("TALLA_GUARDADA", ""))
-        editPrecio.setText(prefs.getString("PRECIO_GUARDADO", ""))
-
         botonGuardar.setOnClickListener {
-            val prenda = editPrenda.text.toString().trim() // trim() para que no cuenten los espacios
-            val talla = editTalla.text.toString().trim()
-            val precio = editPrecio.text.toString().trim()
+            val prendaTexto = editPrenda.text.toString().trim()
+            val tallaTexto = editTalla.text.toString().trim()
+            val precioTexto = editPrecio.text.toString().trim().replace(',', '.') // Reemplaza comas por puntos
+
+            val precioDouble = precioTexto.toDoubleOrNull()
 
             when {
-                prenda.isEmpty() || talla.isEmpty() || precio.isEmpty() -> {
+                prendaTexto.isEmpty() || tallaTexto.isEmpty() || precioTexto.isEmpty() -> {
                     Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
                 }
-                precio.toDoubleOrNull() == null -> {
-                    Toast.makeText(this, "El precio no es válido", Toast.LENGTH_SHORT).show()
+                precioDouble == null -> {
+                    Toast.makeText(this, "El precio no es válido (usa números)", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
-                    prefs.edit()
-                        .putString("PRENDA_GUARDADA", prenda)
-                        .putString("TALLA_GUARDADA", talla)
-                        .putString("PRECIO_GUARDADO", precio)
-                        .apply()
+                    // Creamos el objeto Prenda con los tipos exactos de la Entity
+                    val nuevaPrenda = Prenda(
+                        nombre = prendaTexto,
+                        talla = tallaTexto,
+                        precio = precioDouble
+                    )
 
-                    // añadir al historial
-                    Historial.prendas.add(Prenda(prenda, talla, precio))
+                    // 2. Guardar en Room dentro de la corrutina y cambiar de pantalla al terminar
+                    lifecycleScope.launch {
+                        dao.insertar(nuevaPrenda)
 
-                    val intent = Intent(this, MainActivity2::class.java)
-                    intent.putExtra("PRENDA_EXTRA", prenda)
-                    intent.putExtra("TALLA_EXTRA", talla)
-                    intent.putExtra("PRECIO_EXTRA", precio)
-                    startActivity(intent)
+                        val intent = Intent(this@MainActivity, MainActivity2::class.java)
+                        intent.putExtra("PRENDA_EXTRA", prendaTexto)
+                        intent.putExtra("TALLA_EXTRA", tallaTexto)
+                        intent.putExtra("PRECIO_EXTRA", precioTexto)
+                        startActivity(intent)
+                    }
                 }
             }
         }
 
-        // botón Ver Historial
+        // Botón Ver Historial
         botonHistorial.setOnClickListener {
             startActivity(Intent(this, HistorialActivity::class.java))
         }
 
+        // Botón Limpiar todo
         botonLimpiar.setOnClickListener {
             editPrenda.text.clear()
             editTalla.text.clear()
             editPrecio.text.clear()
-            prefs.edit().clear().apply()
-
-            //  vaciar también el historial
-            Historial.prendas.clear()
-
-            Toast.makeText(this, "Datos borrados", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Campos borrados", Toast.LENGTH_SHORT).show()
         }
     }
 }
